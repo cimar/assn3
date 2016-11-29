@@ -19,12 +19,18 @@ best <- function(state, outcome_name) {
   filter_state<-outcome_df[outcome_df$State==state,]
   
   ## find death rate per hospital ## don't need mean here
-  ## don't need tapply but the resultant vector is easier to work with
+  ## don't need tapply but i originally misunderstood the data-set
+  ## and it turns out this works is maybe easier than sorting "filter_state"
+  
+  ## both my methods fail for MD, pneumonia -- because I'm coercing factors 
+  ## incorrectly, I think, as I do this
   death_by_hospital<-tapply(as.numeric(filter_state[, index]),filter_state$Hospital.Name,sum)
   
   ## Return hospital name in that state with lowest 30-day death
   ## rate
-  ## sort(death_by_hospital)[1]
-  sort(filter_state[, index])[1]$Hospital.Name
+  names(sort(death_by_hospital)[1])
+  
+  ## can work on alternative path, if you want
+  ## sort(filter_state[, index])[1]$Hospital.Name
   
 }
