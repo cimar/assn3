@@ -16,11 +16,15 @@ best <- function(state, outcome_name) {
   
   index<-outcome_index[outcome_name]
   ## filter dataset down by state
-  state_outcome<-outcome_df[outcome_df$State==state]
+  filter_state<-outcome_df[outcome_df$State==state,]
   
-  ## find mean death rate per hospital
-  death_by_hospital<-tapply(as.numeric(outcome_df[, index]),outcome_df$Hospital.Name,mean)
-
+  ## find death rate per hospital ## don't need mean here
+  ## don't need tapply but the resultant vector is easier to work with
+  death_by_hospital<-tapply(as.numeric(filter_state[, index]),filter_state$Hospital.Name,sum)
+  
   ## Return hospital name in that state with lowest 30-day death
   ## rate
+  ## sort(death_by_hospital)[1]
+  sort(filter_state[, index])[1]$Hospital.Name
+  
 }
