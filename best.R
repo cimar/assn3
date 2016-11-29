@@ -22,9 +22,7 @@ best <- function(state, outcome_name) {
   ## don't need tapply but i originally misunderstood the data-set
   ## and it turns out this works is maybe easier than sorting "filter_state"
   
-  ## both my methods fail for MD, pneumonia -- because I'm coercing factors 
-  ## incorrectly, I think, as I do this
-  death_by_hospital<-tapply(as.numeric(filter_state[, index]),filter_state$Hospital.Name,sum)
+  death_by_hospital<-tapply(as.numeric(as.character(filter_state[, index])),filter_state$Hospital.Name,sum)
   
   ## Return hospital name in that state with lowest 30-day death
   ## rate

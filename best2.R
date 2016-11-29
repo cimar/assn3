@@ -17,10 +17,10 @@ best <- function(state, outcome_name) {
   index<-outcome_index[outcome_name]
   ## filter dataset down by state
   filter_state<-outcome_df[outcome_df$State==state,]
-  deaths<-min(as.numeric(levels(filter_state[,index])))
+  deaths<-min(as.numeric(as.character(filter_state[,index])))
   
-  ## GRR IT'S NOT WORKING something about the factor typing
-  best_hospitals<-filter_state[as.numeric(levels(filter_state[,index]))==deaths,]
+  ## they work now
+  best_hospitals<-filter_state[as.numeric(as.character(filter_state[,index]))==deaths,]
 
   ## can work on alternative path, if you want
   min(as.character(best_hospitals$Hospital.Name))
