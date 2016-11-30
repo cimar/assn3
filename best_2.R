@@ -4,8 +4,8 @@ names(outcome_index)<-c("heart attack", "heart failure", "pneumonia")
 best <- function(state, outcome_name) {
   
   ##Read data
-  outcome_df<-read.csv("outcome-of-care-measures.csv",na.strings="Not Available",stringsAsFactors = FALSE)  
-
+  outcome_df<-read.csv("outcome-of-care-measures.csv",na.strings="Not Available",stringsAsFactors = FALSE)
+  
   ## Check that state and outcome are valid
   if(!(state %in% outcome_df$State)){
     stop("invalid state")
@@ -13,7 +13,6 @@ best <- function(state, outcome_name) {
   if(!(outcome_name %in% names(outcome_index))){
     stop("invalid outcome")
   }
-  
   hospi<-2
   statei<-7
   index<-outcome_index[outcome_name]
@@ -21,14 +20,17 @@ best <- function(state, outcome_name) {
   filtered_df<-outcome_df[outcome_df$State==state,c(hospi,statei,index)]
   filtered_df<-na.omit(filtered_df)
   
-  deaths<-min(filtered_df[,3])
+  ## find death rate per hospital ## don't need mean here
+  ## don't need tapply but i originally misunderstood the data-set
+  ## and it turns out this works is maybe easier than sorting "filter_state"
   
-  ## if I don't want the "NAs introduced by coercion
+  death_by_hospital<-tapply(filtered_df[, 3],filtered_df$Hospital.Name,sum)
   
-  ## they work now
-  best_hospitals<-filtered_df[filtered_df[,3]==deaths,]
-
+  ## Return hospital name in that state with lowest 30-day death
+  ## rate
+  names(sort(death_by_hospital)[1])
+  
   ## can work on alternative path, if you want
-  min(best_hospitals$Hospital.Name)
+  ## sort(filter_state[, index])[1]$Hospital.Name
   
 }
